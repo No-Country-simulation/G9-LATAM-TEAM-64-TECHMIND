@@ -15,7 +15,7 @@ Clasificar contenido técnico en cinco categorías mediante un pipeline de Machi
 ## Archivos
 
 - `TechMind_EDA.ipynb`: limpieza, análisis exploratorio, entrenamiento, evaluación y validación del modelo.
-- `dataset_final_actualizado_FINAL_103filas.xlsx`: dataset original utilizado para la carga y limpieza.
+- `dataset_final_actualizado_enriquecido.xlsx`: dataset utilizado para la carga, limpieza y entrenamiento del modelo final. Contiene 103 filas originales y 98 registros válidos después de eliminar 5 filas vacías.
 - `modelo_techmind_v2.joblib`: pipeline final serializado con TF-IDF y Logistic Regression.
 
 ## Dataset final
