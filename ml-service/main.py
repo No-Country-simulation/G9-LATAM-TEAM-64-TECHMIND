@@ -29,6 +29,7 @@ class PredictionResult(BaseModel):
     palabras_clave: list[str]
     temas_relacionados: list[str]
     resumen_corto: str | None
+    requiere_revision: bool
 
 @app.post("/predict", response_model=PredictionResult)
 def predict(data: InputData):
@@ -40,12 +41,15 @@ def predict(data: InputData):
     categoria = model.predict(text_vector)[0]
     probabilidad = float(model.predict_proba(text_vector).max())
     
-    # TODO: Implementar lógica de enriquecimiento (palabras_clave, temas_relacionados, resumen_corto)
+    # Aplicar lógica de negocio acordada
+    # Umbral de confianza 50%
+    requiere_revision = probabilidad < 0.50
     
     return {
         "categoria": categoria,
         "probabilidad": probabilidad,
-        "palabras_clave": [], # Lógica pendiente de Data Analyst
-        "temas_relacionados": [], # Lógica pendiente de Data Analyst
-        "resumen_corto": None # Lógica pendiente de Data Analyst
+        "palabras_clave": [], # Pendiente de lógica de Data Analyst
+        "temas_relacionados": [], # Pendiente de lógica de Data Analyst
+        "resumen_corto": None,
+        "requiere_revision": requiere_revision
     }
