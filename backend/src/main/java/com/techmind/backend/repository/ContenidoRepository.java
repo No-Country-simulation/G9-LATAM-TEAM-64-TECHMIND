@@ -1,5 +1,6 @@
 package com.techmind.backend.repository;
 
+import com.techmind.backend.dto.ContenidoResponseDTO;
 import com.techmind.backend.model.Contenido;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
