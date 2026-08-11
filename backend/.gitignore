@@ -1,4 +1,4 @@
-HELP.md
+vscode_lsp_terminal_prompt_tracker= {}
 target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
