@@ -26,6 +26,7 @@ class InputData(BaseModel):
 class PredictionResult(BaseModel):
     categoria: str
     probabilidad: float
+    confianza: str
     palabras_clave: list[str]
     temas_relacionados: list[str]
     resumen_corto: str | None
@@ -227,7 +228,14 @@ def predict(data: InputData):
     limite=160
 )
     # Aplicar lógica de negocio acordada
-    # Umbral de confianza 50%
+    # Umbral de confianza: Alta >= 0.75, Media >= 0.50, Baja < 0.50
+    if probabilidad >= 0.75:
+        confianza = "alta"
+    elif probabilidad >= 0.50:
+        confianza = "media"
+    else:
+        confianza = "baja"
+    
     requiere_revision = probabilidad < 0.50
     
     return {
