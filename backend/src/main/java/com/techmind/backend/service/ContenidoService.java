@@ -1,0 +1,65 @@
+package com.techmind.backend.service;
+
+import com.techmind.backend.dto.ContenidoRequestDTO;
+import com.techmind.backend.dto.ContenidoResponseDTO;
+import com.techmind.backend.dto.MlResponseDTO;
+import com.techmind.backend.model.Contenido;
+import com.techmind.backend.repository.ContenidoRepository;
+import com.techmind.backend.service.client.MlServiceClient;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class ContenidoService {
+
+    private final ContenidoRepository repository;
+    private final MlServiceClient mlClient;
+
+    public ContenidoService(ContenidoRepository repository, MlServiceClient mlClient) {
+        this.repository = repository;
+        this.mlClient = mlClient;
+    }
+
+    @Transactional
+    public ContenidoResponseDTO processAndSave(ContenidoRequestDTO request) {
+        // 1. Call ML Service
+        MlResponseDTO mlResponse = mlClient.processContent(request);
+
+        // 2. Map ML response to Entity
+        Contenido contenido = new Contenido();
+        contenido.setTitulo(request.getTitulo());
+        contenido.setTexto(request.getTexto());
+        contenido.setCategoria(mlResponse.getCategoria());
+        contenido.setEtiquetas(mlResponse.getPalabras_clave());
+        // Add other fields as needed
+
+        // 3. Save to DB
+        Contenido saved = repository.save(contenido);
+
+        // 4. Map Entity to ResponseDTO
+        return new ContenidoResponseDTO(
+                saved.getId(),
+                saved.getTitulo(),
+                saved.getTexto(),
+                saved.getCategoria(),
+                saved.getEtiquetas(),
+                saved.getFechaRegistro()
+        );
+    }
+
+    public List<ContenidoResponseDTO> findAll() {
+        return repository.findAll().stream()
+                .map(c -> new ContenidoResponseDTO(
+                        c.getId(),
+                        c.getTitulo(),
+                        c.getTexto(),
+                        c.getCategoria(),
+                        c.getEtiquetas(),
+                        c.getFechaRegistro()
+                ))
+                .collect(Collectors.toList());
+    }
+}
