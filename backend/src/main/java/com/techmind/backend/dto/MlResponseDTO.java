@@ -11,6 +11,7 @@ import java.util.List;
 public class MlResponseDTO {
     private String categoria;
     private double probabilidad;
+    private String confianza;
     private List<String> palabras_clave;
     private List<String> temas_relacionados;
     private String resumen_corto;
