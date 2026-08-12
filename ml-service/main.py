@@ -241,6 +241,7 @@ def predict(data: InputData):
     return {
         "categoria": categoria,
         "probabilidad": probabilidad,
+        "confianza": confianza,
         "palabras_clave": palabras_clave,
         "temas_relacionados": temas_relacionados, 
         "resumen_corto": resumen_corto,
