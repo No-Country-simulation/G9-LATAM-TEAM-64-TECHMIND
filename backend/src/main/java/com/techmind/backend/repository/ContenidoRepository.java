@@ -10,5 +10,4 @@ import java.util.List;
 @Repository
 public interface ContenidoRepository extends JpaRepository<Contenido, Long> {
     // Aquí podemos añadir métodos de consulta personalizados si fuera necesario.
-    public List<ContenidoResponseDTO> getAllContents();
 }

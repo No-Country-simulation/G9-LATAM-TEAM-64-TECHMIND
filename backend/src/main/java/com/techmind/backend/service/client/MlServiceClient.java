@@ -2,6 +2,7 @@ package com.techmind.backend.service.client;
 
 import com.techmind.backend.dto.ContenidoRequestDTO;
 import com.techmind.backend.dto.MlResponseDTO;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -10,9 +11,13 @@ public class MlServiceClient {
 
     private final WebClient webClient;
 
-    public MlServiceClient(WebClient.Builder webClientBuilder) {
-        // Assuming FastAPI is running on port 8000
-        this.webClient = webClientBuilder.baseUrl("http://localhost:8000").build();
+    public MlServiceClient(
+            WebClient.Builder webClientBuilder,
+            @Value("${ml.service.url:http://127.0.0.1:8001}") String mlServiceUrl
+    ) {
+        this.webClient = webClientBuilder
+                .baseUrl(mlServiceUrl)
+                .build();
     }
 
     public MlResponseDTO processContent(ContenidoRequestDTO request) {
