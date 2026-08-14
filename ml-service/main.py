@@ -8,7 +8,7 @@ app = FastAPI()
 
 # Cargar pipeline completo
 BASE_DIR = Path(__file__).resolve().parent
-PIPELINE_PATH = BASE_DIR / "models" / "modelo_techmind_v2.joblib"
+PIPELINE_PATH = BASE_DIR / "models" / "modelo_techmind_v3.joblib"
 
 if PIPELINE_PATH.exists():
     pipeline = joblib.load(PIPELINE_PATH)
@@ -228,15 +228,15 @@ def predict(data: InputData):
     limite=160
 )
     # Aplicar lógica de negocio acordada
-    # Umbral de confianza: Alta >= 0.75, Media >= 0.50, Baja < 0.50
-    if probabilidad >= 0.75:
+    # Umbral de confianza: Alta >= 0.40, Media >= 0.30, Baja < 0.30
+    if probabilidad >= 0.40:
         confianza = "alta"
-    elif probabilidad >= 0.50:
+    elif probabilidad >= 0.30:
         confianza = "media"
     else:
         confianza = "baja"
     
-    requiere_revision = probabilidad < 0.50
+    requiere_revision = probabilidad < 0.30
     
     return {
         "categoria": categoria,
