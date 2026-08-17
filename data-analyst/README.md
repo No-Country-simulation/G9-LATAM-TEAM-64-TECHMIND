@@ -12,73 +12,104 @@ Clasificar contenido técnico en cinco categorías mediante un pipeline de Machi
 - Data Science
 - Frontend
 
-## Archivos
+## Estado de los modelos
 
-- `TechMind_EDA.ipynb`: limpieza, análisis exploratorio, entrenamiento, evaluación y validación del modelo.
-- `dataset_final_actualizado_enriquecido.xlsx`: dataset utilizado para la carga, limpieza y entrenamiento del modelo final. Contiene 103 filas originales y 98 registros válidos después de eliminar 5 filas vacías.
-- `modelo_techmind_v2.joblib`: pipeline final serializado con TF-IDF y Logistic Regression.
+- **Modelo estable:** v3, utilizado actualmente por `ml-service`.
+- **Modelo candidato:** v4, evaluado sin reemplazar el modelo estable.
 
-## Dataset final
+El candidato v4 mejora las métricas globales de validación cruzada, pero todavía presenta errores en dos casos externos de Backend. Por este motivo, v3 continúa siendo la versión recomendada para integración.
 
-Después de eliminar 5 filas completamente vacías, el dataset quedó con:
+## Archivos del candidato v4
 
-- 98 registros válidos
-- 5 categorías balanceadas
+- `TechMind_EDA_modelo_v4_candidato.ipynb`: análisis exploratorio, entrenamiento, validación cruzada y evaluación externa.
+- `dataset_techmind_candidato_v4.xlsx`: dataset enriquecido y balanceado utilizado para entrenar el candidato.
+- `modelo_techmind_v4_candidato.joblib`: pipeline candidato con TF-IDF y Logistic Regression.
+- `resultados_pruebas_externas_v4.csv`: resultados de las seis pruebas externas, incluyendo confianza, segunda categoría, margen y necesidad de revisión.
+
+## Dataset candidato
+
+El archivo contiene 130 filas, de las cuales 5 están completamente vacías. Después de eliminarlas, el dataset queda con:
+
+- 125 registros válidos
 - 13 columnas
+- 5 categorías
+- 25 registros por categoría
 
-## Resultados del modelo
+El dataset anterior contenía 98 registros válidos. El enriquecimiento incorporó 27 ejemplos nuevos y mantuvo el balance entre las categorías.
 
-### Split de prueba
+## Preparación del texto
 
-- Accuracy: 95 %
-- F1 macro: 94.92 %
-- DummyClassifier: 20 %
+Para entrenar el candidato se combinan:
+
+- título
+- descripción adaptada
+- palabras clave
+
+El pipeline utiliza TF-IDF con unigramas y bigramas, seguido de una regresión logística con balance de clases.
+
+## Resultados del candidato v4
+
+### División de entrenamiento y prueba
+
+- Registros de entrenamiento: 100
+- Registros de prueba: 25
+- Accuracy: 88 %
+- F1 macro: 88.16 %
 
 ### Validación cruzada estratificada de 5 folds
 
-- Accuracy promedio: 85.79 % ± 4.73 %
-- F1 macro promedio: 85.83 % ± 4.51 %
+- Accuracy promedio: 88.80 %
+- Desviación de accuracy: 3.92 %
+- F1 macro promedio: 88.24 %
+- Desviación de F1 macro: 4.07 %
 
-## Artefacto final
+### Comparación con DummyClassifier
 
-El archivo `modelo_techmind_v2.joblib` contiene el pipeline completo:
+- Dummy accuracy promedio: 20 %
+- Dummy F1 macro promedio: 6.67 %
+- Mejora del candidato en accuracy: 68.80 puntos porcentuales
+- Mejora del candidato en F1 macro: 81.57 puntos porcentuales
 
-1. Vectorización TF-IDF
-2. Clasificación con Logistic Regression
+## Comparación v3 vs. candidato v4
 
-El artefacto fue guardado, cargado nuevamente y validado con una predicción desde cero.
+| Métrica | Modelo estable v3 | Candidato v4 |
+|---|---:|---:|
+| Accuracy promedio CV | 85.79 % | 88.80 % |
+| F1 macro promedio CV | 85.83 % | 88.24 % |
+| Desviación de accuracy | 4.73 % | 3.92 % |
+| Desviación de F1 macro | 4.51 % | 4.07 % |
+| Pruebas externas correctas | 6/6 | 4/6 |
 
-## Uso básico
+Aunque v4 mejora las métricas globales y presenta menor variabilidad, no supera a v3 en la validación externa.
+
+Los casos de concurrencia y bajo acoplamiento todavía se confunden con Frontend. Por ello, v4 se conserva como candidato y no reemplaza al modelo estable v3.
+
+## Confianza y revisión manual
+
+Las pruebas externas registran:
+
+- categoría predicha
+- confianza de la predicción
+- segunda categoría más probable
+- segunda probabilidad
+- margen entre las dos categorías
+- indicador `requiere_revision`
+
+`requiere_revision` se activa cuando la confianza es menor que `0.30`.
+
+## Uso básico del candidato v4
 
 ```python
 import joblib
 
-modelo = joblib.load("modelo_techmind_v2.joblib")
+modelo = joblib.load("modelo_techmind_v4_candidato.joblib")
 
-texto = ["Desarrollo de una API REST con Java y Spring Boot"]
+texto = [
+    "Desarrollo de una API REST con Java y Spring Boot"
+]
 
 categoria = modelo.predict(texto)[0]
 probabilidad = modelo.predict_proba(texto)[0].max()
 
 print("Categoría:", categoria)
 print("Probabilidad:", round(float(probabilidad), 4))
-```
-## Salida del modelo
-
-La categoría y la probabilidad provienen directamente del modelo.
-
-Los campos:
-
-- `palabras_clave`
-- `temas_relacionados`
-- `resumen_corto`
-
-corresponden a una etapa de enriquecimiento complementario.
-
-## Nota sobre artefactos anteriores
-
-Los archivos `modelo_clasificador.joblib` y `vectorizer.joblib` pertenecen a una versión anterior, donde el modelo y el vectorizador se guardaban por separado.
-
-La versión recomendada para integración es:
-
-`modelo_techmind_v2.joblib`
