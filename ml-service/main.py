@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from fastapi import FastAPI
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 import joblib
 
 app = FastAPI()
@@ -21,6 +21,16 @@ else:
 class InputData(BaseModel):
     titulo: str
     texto: str
+
+    @field_validator("titulo", "texto")
+    @classmethod
+    def validar_texto_no_vacio(cls, valor: str) -> str:
+        valor_limpio = valor.strip()
+
+        if not valor_limpio:
+            raise ValueError("El campo no puede estar vacío")
+
+        return valor_limpio
 
 # Definición del contrato de salida
 class PredictionResult(BaseModel):
