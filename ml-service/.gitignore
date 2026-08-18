@@ -4,3 +4,5 @@ __pycache__/
 *.pyo
 .env
 .idea/
+models/modelo_techmind_v3_oci.joblib
+.venv-clean/
