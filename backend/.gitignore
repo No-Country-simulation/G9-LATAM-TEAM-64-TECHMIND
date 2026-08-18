@@ -32,3 +32,6 @@ build/
 ### Env files ###
 .env
 application-*.properties
+
+#sdkman
+.sdkmanrc
