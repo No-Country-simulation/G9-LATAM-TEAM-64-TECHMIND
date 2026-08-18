@@ -15,5 +15,10 @@ public class ContenidoResponseDTO {
     private String texto;
     private String categoria;
     private List<String> etiquetas;
+    private String confianza;
+    private List<String> palabrasClave;
+    private List<String> temasRelacionados;
+    private String resumenCorto;
+    private boolean requiereRevision;
     private LocalDateTime fechaRegistro;
 }

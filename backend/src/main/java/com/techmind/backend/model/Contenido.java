@@ -29,6 +29,19 @@ public class Contenido {
     @ElementCollection
     private List<String> etiquetas;
 
+    private String confianza;
+
+    @ElementCollection
+    private List<String> palabrasClave;
+
+    @ElementCollection
+    private List<String> temasRelacionados;
+
+    @Column(columnDefinition = "TEXT")
+    private String resumenCorto;
+
+    private boolean requiereRevision;
+
     @Column(nullable = false)
     private LocalDateTime fechaRegistro;
 

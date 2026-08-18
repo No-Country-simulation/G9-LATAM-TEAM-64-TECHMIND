@@ -34,7 +34,11 @@ public class ContenidoService {
         contenido.setTexto(request.getTexto());
         contenido.setCategoria(mlResponse.getCategoria());
         contenido.setEtiquetas(mlResponse.getPalabras_clave());
-        // Add other fields as needed
+        contenido.setConfianza(mlResponse.getConfianza());
+        contenido.setPalabrasClave(mlResponse.getPalabras_clave());
+        contenido.setTemasRelacionados(mlResponse.getTemas_relacionados());
+        contenido.setResumenCorto(mlResponse.getResumen_corto());
+        contenido.setRequiereRevision(mlResponse.isRequiere_revision());
 
         // 3. Save to DB
         Contenido saved = repository.save(contenido);
@@ -46,6 +50,11 @@ public class ContenidoService {
                 saved.getTexto(),
                 saved.getCategoria(),
                 saved.getEtiquetas(),
+                saved.getConfianza(),
+                saved.getPalabrasClave(),
+                saved.getTemasRelacionados(),
+                saved.getResumenCorto(),
+                saved.isRequiereRevision(),
                 saved.getFechaRegistro()
         );
     }
@@ -58,6 +67,11 @@ public class ContenidoService {
                         c.getTexto(),
                         c.getCategoria(),
                         c.getEtiquetas(),
+                        c.getConfianza(),
+                        c.getPalabrasClave(),
+                        c.getTemasRelacionados(),
+                        c.getResumenCorto(),
+                        c.isRequiereRevision(),
                         c.getFechaRegistro()
                 ))
                 .collect(Collectors.toList());
