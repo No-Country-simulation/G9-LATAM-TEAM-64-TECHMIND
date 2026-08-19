@@ -35,6 +35,7 @@ public class ContenidoService {
         contenido.setCategoria(mlResponse.getCategoria());
         contenido.setEtiquetas(mlResponse.getPalabras_clave());
         contenido.setConfianza(mlResponse.getConfianza());
+        contenido.setProbabilidad(mlResponse.getProbabilidad());
         contenido.setPalabrasClave(mlResponse.getPalabras_clave());
         contenido.setTemasRelacionados(mlResponse.getTemas_relacionados());
         contenido.setResumenCorto(mlResponse.getResumen_corto());
@@ -51,6 +52,7 @@ public class ContenidoService {
                 saved.getCategoria(),
                 saved.getEtiquetas(),
                 saved.getConfianza(),
+                saved.getProbabilidad(),
                 saved.getPalabrasClave(),
                 saved.getTemasRelacionados(),
                 saved.getResumenCorto(),
@@ -68,6 +70,7 @@ public class ContenidoService {
                         c.getCategoria(),
                         c.getEtiquetas(),
                         c.getConfianza(),
+                        c.getProbabilidad(),
                         c.getPalabrasClave(),
                         c.getTemasRelacionados(),
                         c.getResumenCorto(),

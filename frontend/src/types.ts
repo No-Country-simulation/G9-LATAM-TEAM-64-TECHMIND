@@ -34,8 +34,12 @@ export type Contenido = ContenidoResumen & {
   relacionados?: ContenidoResumen[]
 }
 
-/** Forma real de `ContenidoResponseDTO` (backend Spring). Es la entidad
- *  persistida, no el resultado del modelo: no trae `probabilidad`. */
+/** Traducción entre el contrato del backend y el modelo que usa la interfaz.
+ *
+ * El backend devuelve la probabilidad numérica y el nivel textual de confianza.
+ * Para registros antiguos, el adaptador conserva como respaldo la confianza
+ * numérica almacenada como string.
+ */
 export type ContenidoBackendDTO = {
   id: number
   titulo: string
@@ -43,6 +47,7 @@ export type ContenidoBackendDTO = {
   categoria: string | null
   etiquetas: string[] | null
   confianza: string | null
+  probabilidad: number | null
   palabrasClave: string[] | null
   temasRelacionados: string[] | null
   resumenCorto: string | null

@@ -17,11 +17,18 @@ function toId(id: number | null | undefined): string | undefined {
   return id === null || id === undefined ? undefined : String(id)
 }
 
-/** `confianza` llega como string 0–1 (ej. "0.95"); `probabilidad` la espera
- *  como number en la misma escala. Cualquier valor no numérico cae a 0. */
-function toProbabilidad(confianza: string | null | undefined): number {
+/** Usa la probabilidad nueva y conserva compatibilidad con la confianza
+ * numérica almacenada por registros anteriores. */
+function toProbabilidad(
+  probabilidad: number | null | undefined,
+  confianza: string | null | undefined,
+): number {
+  if (typeof probabilidad === "number" && Number.isFinite(probabilidad)) {
+    return Math.min(1, Math.max(0, probabilidad))
+  }
+
   const parsed = Number(confianza)
-  return Number.isFinite(parsed) ? parsed : 0
+  return Number.isFinite(parsed) ? Math.min(1, Math.max(0, parsed)) : 0
 }
 
 /** `ContenidoResponseDTO` → resultado del analizador.
@@ -33,7 +40,7 @@ export function toAnalisisResponse(dto: ContenidoBackendDTO): AnalisisResponse {
     id: toId(dto.id),
     categoria: dto.categoria ?? "Sin categoría",
     informacion_adicional: dto.etiquetas ?? [],
-    probabilidad: toProbabilidad(dto.confianza),
+    probabilidad: toProbabilidad(dto.probabilidad, dto.confianza),
   }
 }
 
@@ -45,7 +52,7 @@ export function toContenidoResumen(dto: ContenidoBackendDTO): ContenidoResumen {
     titulo: dto.titulo,
     categoria: dto.categoria ?? "Sin categoría",
     informacion_adicional: dto.etiquetas ?? [],
-    probabilidad: toProbabilidad(dto.confianza),
+    probabilidad: toProbabilidad(dto.probabilidad, dto.confianza),
     creado_en: dto.fechaRegistro ?? undefined,
   }
 }
