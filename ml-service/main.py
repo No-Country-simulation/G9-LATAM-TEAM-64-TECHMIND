@@ -3,19 +3,74 @@ from pathlib import Path
 from fastapi import FastAPI
 from pydantic import BaseModel, field_validator
 import joblib
+import oci
 
 app = FastAPI()
 
-# Cargar pipeline completo
+# Carga del pipeline:
+# intenta descargar v3 desde OCI Object Storage;
+# si OCI no está disponible, utiliza la copia local.
 BASE_DIR = Path(__file__).resolve().parent
-PIPELINE_PATH = BASE_DIR / "models" / "modelo_techmind_v3.joblib"
 
-if PIPELINE_PATH.exists():
-    pipeline = joblib.load(PIPELINE_PATH)
-else:
-    raise FileNotFoundError(
-        f"No se encontró el pipeline en: {PIPELINE_PATH}"
+LOCAL_PIPELINE_PATH = (
+    BASE_DIR / "models" / "modelo_techmind_v3.joblib"
+)
+
+OCI_PIPELINE_PATH = (
+    BASE_DIR / "models" / "modelo_techmind_v3_oci.joblib"
+)
+
+OCI_BUCKET_NAME = "techmind-storage"
+OCI_OBJECT_NAME = "models/modelo_techmind_v3.joblib"
+
+
+def descargar_modelo_desde_oci() -> Path:
+    config = oci.config.from_file()
+
+    client = oci.object_storage.ObjectStorageClient(config)
+    namespace = client.get_namespace().data
+
+    response = client.get_object(
+        namespace_name=namespace,
+        bucket_name=OCI_BUCKET_NAME,
+        object_name=OCI_OBJECT_NAME,
     )
+
+    OCI_PIPELINE_PATH.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    with open(OCI_PIPELINE_PATH, "wb") as archivo:
+        archivo.write(response.data.content)
+
+    return OCI_PIPELINE_PATH
+
+
+try:
+    pipeline_path = descargar_modelo_desde_oci()
+    pipeline = joblib.load(pipeline_path)
+
+    print(
+        "Modelo v3 cargado correctamente desde "
+        "OCI Object Storage"
+    )
+
+except Exception as error:
+    print(
+        f"No se pudo cargar el modelo v3 desde OCI: {error}"
+    )
+    print("Usando modelo v3 local como fallback...")
+
+    if LOCAL_PIPELINE_PATH.exists():
+        pipeline = joblib.load(LOCAL_PIPELINE_PATH)
+        print("Modelo v3 local cargado correctamente")
+    else:
+        raise FileNotFoundError(
+            "No se pudo obtener el modelo v3 desde OCI "
+            "y tampoco existe el modelo local en: "
+            f"{LOCAL_PIPELINE_PATH}"
+        ) from error
 
 # Definición del contrato de entrada
 class InputData(BaseModel):
