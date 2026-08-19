@@ -29,7 +29,7 @@ public class ContenidoController {
     }
 
     @PostMapping("/procesar-archivo")
-    public ResponseEntity<ContenidoResponseDTO> processFile(@RequestParam("file") org.springframework.web.multipart.MultipartFile file) throws java.io.IOException {
+    public ResponseEntity<ContenidoResponseDTO> processFile(@RequestParam("file") org.springframework.web.multipart.MultipartFile file) throws Exception {
         return ResponseEntity.status(201).body(contenidoService.processAndSaveFromFile(file));
     }
 }

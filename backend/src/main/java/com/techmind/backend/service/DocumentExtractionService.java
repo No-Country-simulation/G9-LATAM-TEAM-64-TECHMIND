@@ -7,6 +7,8 @@ import org.apache.tika.metadata.TikaCoreProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import org.apache.tika.exception.TikaException;
+import org.xml.sax.SAXException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -15,7 +17,7 @@ public class DocumentExtractionService {
 
     private final Tika tika = new Tika();
 
-    public ContenidoRequestDTO extractContent(MultipartFile file) throws IOException {
+    public ContenidoRequestDTO extractContent(MultipartFile file) throws IOException, TikaException, SAXException {
         String originalFilename = file.getOriginalFilename();
         Metadata metadata = new Metadata();
         String text;

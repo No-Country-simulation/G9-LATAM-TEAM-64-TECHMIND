@@ -26,7 +26,7 @@ public class ContenidoService {
     }
 
     @Transactional
-    public ContenidoResponseDTO processAndSaveFromFile(org.springframework.web.multipart.MultipartFile file) throws java.io.IOException {
+    public ContenidoResponseDTO processAndSaveFromFile(org.springframework.web.multipart.MultipartFile file) throws java.io.IOException, org.apache.tika.exception.TikaException, org.xml.sax.SAXException {
         ContenidoRequestDTO request = extractionService.extractContent(file);
         return processAndSave(request);
     }
