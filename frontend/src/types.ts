@@ -34,6 +34,22 @@ export type Contenido = ContenidoResumen & {
   relacionados?: ContenidoResumen[]
 }
 
+/** Forma real de `ContenidoResponseDTO` (backend Spring). Es la entidad
+ *  persistida, no el resultado del modelo: no trae `probabilidad`. */
+export type ContenidoBackendDTO = {
+  id: number
+  titulo: string
+  texto: string
+  categoria: string | null
+  etiquetas: string[] | null
+  confianza: string | null
+  palabrasClave: string[] | null
+  temasRelacionados: string[] | null
+  resumenCorto: string | null
+  requiereRevision: boolean
+  fechaRegistro: string
+}
+
 export type ListaContenidos = {
   total: number
   items: ContenidoResumen[]
