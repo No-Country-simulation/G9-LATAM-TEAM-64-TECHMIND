@@ -145,6 +145,22 @@ def extraer_palabras_clave(
     "e",
     "u",
 
+    # Palabras funcionales y verbos con poco valor temático
+    "es",
+    "son",
+    "ser",
+    "se",
+    "que",
+    "como",
+    "mediante",
+    "permite",
+    "permiten",
+    "puede",
+    "pueden",
+    "tambien",
+    "propiedad",
+    "propiedades",
+
     # Verbos frecuentes
     "usar",
     "usando",
@@ -155,14 +171,14 @@ def extraer_palabras_clave(
     "desarrollar",
     "desarrollo",
     "implementar",
-    "implementación",
+    "implementacion",
 
     # Términos demasiado genéricos
     "api",
     "rest",
     "servicio",
     "servicios",
-    "aplicación",
+    "aplicacion",
     "sistema",
     "proyecto",
     "software",

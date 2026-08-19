@@ -30,6 +30,7 @@ public class Contenido {
     private List<String> etiquetas;
 
     private String confianza;
+    private Double probabilidad;
 
     @ElementCollection
     private List<String> palabrasClave;

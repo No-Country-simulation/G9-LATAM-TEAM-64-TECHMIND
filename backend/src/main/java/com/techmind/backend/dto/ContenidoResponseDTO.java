@@ -16,6 +16,7 @@ public class ContenidoResponseDTO {
     private String categoria;
     private List<String> etiquetas;
     private String confianza;
+    private Double probabilidad;
     private List<String> palabrasClave;
     private List<String> temasRelacionados;
     private String resumenCorto;
