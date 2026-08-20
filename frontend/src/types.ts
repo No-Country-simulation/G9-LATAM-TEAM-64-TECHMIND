@@ -23,6 +23,9 @@ export type ContenidoResumen = {
   titulo: string
   categoria: string
   probabilidad: number
+  /** "alta" | "media" | "baja" para registros nuevos; registros antiguos
+   *  pueden traer otro formato heredado (ver `analyzer-adapter.ts`). */
+  confianza?: string | null
   informacion_adicional: Keyword[]
   similitud?: number
   creado_en?: string
