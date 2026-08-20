@@ -1,10 +1,10 @@
-# 🧠 TechMind
-
 <div align="center">
 
-### Organización inteligente del conocimiento técnico
+<h1> TechMind</h1>
 
-Transforma textos y documentos técnicos en información clasificada, resumida y fácil de consultar.
+<h3>Organización inteligente del conocimiento técnico</h3>
+
+<p>Transforma textos y documentos técnicos en información clasificada, resumida y fácil de consultar.</p>
 
 ![Java](https://img.shields.io/badge/Java-21-ED8B00?logo=openjdk&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.4-6DB33F?logo=springboot&logoColor=white)
@@ -442,12 +442,14 @@ En todos los casos se generaron categoría, palabras clave, temas relacionados y
 
 Proyecto desarrollado por **G9 LATAM · Team 64** durante el Hackathon ONE de No Country.
 
+## Integrantes del equipo
+
 | Integrante | Rol | Contribución |
 |---|---|---|
-| Verónica Apolaya | Data Analyst / Machine Learning | Dataset, EDA, entrenamiento y evaluación del modelo, integración ML, pruebas end-to-end y documentación. |
-| Por completar | Backend | API, persistencia e integración con el servicio de ML. |
-| Por completar | Frontend | Interfaz, experiencia de usuario y consumo de la API. |
-| Por completar | Cloud / Base de datos | Infraestructura, PostgreSQL y servicios en la nube. |
+| Nahir Icare | Full Stack Developer | Integración final de la aplicación, conexión con PostgreSQL en Neon y procesamiento de contenido mediante texto y archivos PDF. |
+| Mauricio Martínez | Back-End Developer | Desarrollo y corrección de la API, persistencia de contenidos e integración del backend con el servicio de Machine Learning. |
+| Félix Robert Aguilar Barrera | Back-End Developer | Creación del controlador de contenidos y definición inicial de los endpoints REST para procesar y consultar contenidos. |
+| Verónica Apolaya | Data Analyst / Machine Learning | Preparación del dataset, EDA, entrenamiento y evaluación del modelo, integración ML, pruebas end-to-end y documentación. |
 
 > Antes de publicar la versión final, completar los nombres y aportes de todos los integrantes.
 
