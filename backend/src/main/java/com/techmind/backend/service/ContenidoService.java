@@ -17,10 +17,18 @@ public class ContenidoService {
 
     private final ContenidoRepository repository;
     private final MlServiceClient mlClient;
+    private final DocumentExtractionService extractionService;
 
-    public ContenidoService(ContenidoRepository repository, MlServiceClient mlClient) {
+    public ContenidoService(ContenidoRepository repository, MlServiceClient mlClient, DocumentExtractionService extractionService) {
         this.repository = repository;
         this.mlClient = mlClient;
+        this.extractionService = extractionService;
+    }
+
+    @Transactional
+    public ContenidoResponseDTO processAndSaveFromFile(org.springframework.web.multipart.MultipartFile file) throws java.io.IOException, org.apache.tika.exception.TikaException, org.xml.sax.SAXException {
+        ContenidoRequestDTO request = extractionService.extractContent(file);
+        return processAndSave(request);
     }
 
     @Transactional
