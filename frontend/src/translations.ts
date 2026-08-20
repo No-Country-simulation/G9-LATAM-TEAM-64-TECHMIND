@@ -21,7 +21,7 @@ export const DICT = {
     "hero.stat3": "Recomendación de relacionados",
 
     "analyzer.title": "Analizar contenido",
-    "analyzer.description": "POST /contenido — el texto se envía al modelo entrenado y la respuesta se devuelve en JSON.",
+    "analyzer.description": "El texto se envía al modelo entrenado y la respuesta se devuelve en JSON.",
     "analyzer.titulo": "Título",
     "analyzer.tituloPlaceholder": "Introducción a Spring Boot",
     "analyzer.texto": "Texto técnico",
@@ -92,7 +92,7 @@ export const DICT = {
     "hero.stat3": "Related content recommendation",
 
     "analyzer.title": "Analyze content",
-    "analyzer.description": "POST /contenido — the text is sent to the trained model and the response comes back as JSON.",
+    "analyzer.description": "The text is sent to the trained model and the response comes back as JSON.",
     "analyzer.titulo": "Title",
     "analyzer.tituloPlaceholder": "Getting started with Spring Boot",
     "analyzer.texto": "Technical text",

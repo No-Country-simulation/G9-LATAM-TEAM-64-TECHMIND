@@ -9,7 +9,6 @@ export function SiteFooter() {
         <p>
           <span className="font-semibold text-foreground">{t("brand.name")}</span> — {t("footer.note")}
         </p>
-        <p className="font-mono">POST /contenido · GET /contenidos · JSON</p>
       </div>
     </footer>
   )
