@@ -32,10 +32,13 @@ export const ROUTES = {
 /** Endpoints de la API del modelo, relativos a `API_BASE`. */
 export const ENDPOINTS = {
   analizar: "/api/contenidos/procesar",
-  analizarArchivo: "/api/contenidos/procesar-archivo",
+  /** TODO: ruta provisional. Confirmar con backend el path y el nombre del campo
+   *  del `multipart/form-data` (ver `ARCHIVO_FORM_FIELD`) antes de integrar. */
+  analizarArchivo: "/api/contenidos/archivo",
   contenidos: "/api/contenidos",
   contenidoPorId: (id: string) => `/api/contenidos/${encodeURIComponent(id)}`,
 } as const
+
 
 // --- Comportamiento ----------------------------------------------------------
 

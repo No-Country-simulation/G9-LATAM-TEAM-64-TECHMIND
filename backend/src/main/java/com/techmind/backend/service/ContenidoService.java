@@ -8,7 +8,10 @@ import com.techmind.backend.repository.ContenidoRepository;
 import com.techmind.backend.service.client.MlServiceClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +32,27 @@ public class ContenidoService {
     public ContenidoResponseDTO processAndSaveFromFile(org.springframework.web.multipart.MultipartFile file) throws java.io.IOException, org.apache.tika.exception.TikaException, org.xml.sax.SAXException {
         ContenidoRequestDTO request = extractionService.extractContent(file);
         return processAndSave(request);
+    }
+
+    @Transactional
+    public ContenidoResponseDTO processFileAndSave(MultipartFile file) {
+        try {
+            String contentType = file.getContentType();
+            String textoExtraido;
+
+            // Para el MVP, solo procesamos archivos de texto explícitos.
+            // Los archivos binarios como PDF/Word requieren Apache Tika, que añadiremos más adelante.
+            if (contentType != null && (contentType.startsWith("text/") || contentType.equals("application/json"))) {
+                textoExtraido = new String(file.getBytes(), StandardCharsets.UTF_8);
+            } else {
+                textoExtraido = "Archivo (" + file.getOriginalFilename() + ") subido. Extracción de texto pendiente de implementación (requiere Tika).";
+            }
+
+            ContenidoRequestDTO request = new ContenidoRequestDTO(file.getOriginalFilename(), textoExtraido);
+            return processAndSave(request);
+        } catch (IOException e) {
+            throw new RuntimeException("Error al procesar el archivo", e);
+        }
     }
 
     @Transactional
