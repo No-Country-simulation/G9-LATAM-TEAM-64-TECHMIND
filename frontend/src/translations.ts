@@ -69,6 +69,7 @@ export const DICT = {
     "detail.metadata": "Metadatos",
     "detail.id": "Identificador",
     "detail.creado": "Registrado",
+    "detail.temas": "Temas relacionados",
 
     "demo.badge": "Datos de muestra",
     "demo.title": "API del modelo no configurada",
@@ -146,6 +147,7 @@ export const DICT = {
     "detail.metadata": "Metadata",
     "detail.id": "Identifier",
     "detail.creado": "Registered",
+    "detail.temas": "Related topics",
 
     "demo.badge": "Sample data",
     "demo.title": "Model API not configured",

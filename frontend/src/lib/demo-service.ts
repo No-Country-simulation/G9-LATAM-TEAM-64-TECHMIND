@@ -3,24 +3,44 @@
  *  feature puedan alternar entre ambas sin cambiar su firma. */
 
 import { ARCHIVO_DEMO_LEGIBLE, DEMO_LATENCY_MS } from "@/config"
-import { DEMO_CATEGORIAS, DEMO_CONTENIDOS } from "@/lib/demo-data"
-import { demoAnalizar, demoRelacionados } from "@/lib/demo-engine"
+import { DEMO_CONTENIDOS } from "@/lib/demo-data"
+import { demoAnalizar } from "@/lib/demo-engine"
 import type {
   AnalisisArchivoInput,
   AnalisisInput,
   AnalisisResponse,
   Contenido,
-  ContenidoResumen,
-  ListaContenidos,
+  ContenidoBackendDTO,
 } from "@/types"
 
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-function toResumen(contenido: Contenido): ContenidoResumen {
-  const { id, titulo, categoria, probabilidad, informacion_adicional, creado_en, texto } = contenido
-  return { id, titulo, categoria, probabilidad, informacion_adicional, creado_en, texto }
+/** Nivel textual de confianza, con los mismos umbrales que el servicio de ML. */
+function nivelConfianza(probabilidad: number): string {
+  if (probabilidad >= 0.75) return "alta"
+  if (probabilidad >= 0.5) return "media"
+  return "baja"
+}
+
+/** Adapta un contenido de muestra a la forma que devuelve el backend, para que
+ *  el modo demo y el modo API compartan exactamente el mismo camino de datos. */
+function toBackendDTO(contenido: Contenido): ContenidoBackendDTO {
+  return {
+    id: contenido.id,
+    titulo: contenido.titulo,
+    texto: contenido.texto,
+    categoria: contenido.categoria,
+    etiquetas: contenido.informacion_adicional,
+    confianza: nivelConfianza(contenido.probabilidad),
+    probabilidad: contenido.probabilidad,
+    palabrasClave: contenido.informacion_adicional,
+    temasRelacionados: contenido.temas ?? null,
+    resumenCorto: contenido.resumen ?? null,
+    requiereRevision: contenido.probabilidad < 0.5,
+    fechaRegistro: contenido.creado_en ?? "",
+  }
 }
 
 export async function demoAnalizarContenido(input: AnalisisInput): Promise<AnalisisResponse> {
@@ -56,16 +76,8 @@ export async function demoAnalizarArchivo(input: AnalisisArchivoInput): Promise<
   return { ...resultado, probabilidad: Math.min(resultado.probabilidad, 0.5) }
 }
 
-/** Listado completo de muestra. El filtrado lo aplica la biblioteca en memoria
- *  con `filtrarContenidos`, igual que en modo API. */
-export function demoListarContenidos(): ListaContenidos {
-  const items = DEMO_CONTENIDOS.map(toResumen)
-  return { total: items.length, items, categorias: DEMO_CATEGORIAS }
-}
-
-/** Devuelve el contenido con sus relacionados, o `null` si el id no existe. */
-export function demoObtenerContenido(id: string): Contenido | null {
-  const found = DEMO_CONTENIDOS.find((contenido) => contenido.id === id)
-  if (!found) return null
-  return { ...found, relacionados: demoRelacionados(id) }
+/** Listado completo de muestra, en el formato del backend. El filtrado lo
+ *  aplica la biblioteca en memoria, igual que en modo API. */
+export function demoListarContenidos(): ContenidoBackendDTO[] {
+  return DEMO_CONTENIDOS.map(toBackendDTO)
 }

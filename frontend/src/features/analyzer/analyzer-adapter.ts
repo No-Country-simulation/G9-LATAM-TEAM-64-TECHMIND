@@ -13,7 +13,7 @@
 import type { AnalisisResponse, ContenidoBackendDTO, ContenidoResumen } from "@/types"
 
 /** Normaliza el `id` numérico del backend al `string` que usa la interfaz. */
-function toId(id: number | null | undefined): string | undefined {
+function toId(id: number | string | null | undefined): string | undefined {
   return id === null || id === undefined ? undefined : String(id)
 }
 

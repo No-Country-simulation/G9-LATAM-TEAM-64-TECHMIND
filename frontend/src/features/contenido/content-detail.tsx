@@ -3,7 +3,7 @@ import { ArrowLeft } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { ConfidenceMeter, ContentCard, DemoBadge, JsonBlock, KeywordChips } from "@/components/common"
+import { ConfidenceMeter, DemoBadge, JsonBlock, KeywordChips } from "@/components/common"
 import { ROUTES } from "@/config"
 import { useLanguage } from "@/language-context"
 import type { Contenido } from "@/types"
@@ -71,14 +71,21 @@ export function ContentDetail({ contenido, demo }: { contenido: Contenido; demo:
         </div>
       </div>
 
-      {contenido.relacionados && contenido.relacionados.length > 0 && (
+      {/* El backend devuelve nombres de temas derivados de la categoría, no
+          referencias a otros contenidos: se pintan como etiquetas, no como
+          tarjetas enlazables. */}
+      {contenido.temas && contenido.temas.length > 0 && (
         <section className="flex flex-col gap-3">
-          <h2 className="text-sm uppercase tracking-wide text-muted-foreground">{t("result.relacionados")}</h2>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {contenido.relacionados.map((item) => (
-              <ContentCard key={item.id} item={item} />
+          <h2 className="text-sm uppercase tracking-wide text-muted-foreground">{t("detail.temas")}</h2>
+          <ul className="flex flex-wrap gap-2">
+            {contenido.temas.map((tema) => (
+              <li key={tema}>
+                <Badge variant="outline" className="text-sm font-normal">
+                  {tema}
+                </Badge>
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
       )}
 

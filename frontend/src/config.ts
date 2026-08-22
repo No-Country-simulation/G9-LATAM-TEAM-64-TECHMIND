@@ -36,6 +36,9 @@ export const ENDPOINTS = {
    *  del `multipart/form-data` (ver `ARCHIVO_FORM_FIELD`) antes de integrar. */
   analizarArchivo: "/api/contenidos/archivo",
   contenidos: "/api/contenidos",
+  /** No implementado en backend. El detalle no lo necesita: se resuelve desde
+   *  el listado cacheado, que ya devuelve el objeto completo de cada contenido.
+   *  Queda declarado para cuando el listado crezca y toque paginar. */
   contenidoPorId: (id: string) => `/api/contenidos/${encodeURIComponent(id)}`,
 } as const
 

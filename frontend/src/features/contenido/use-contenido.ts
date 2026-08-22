@@ -1,36 +1,32 @@
-import { useEffect, useState } from "react"
-import { obtenerContenido } from "@/features/contenido/contenido-service"
-import type { Contenido } from "@/types"
+import { useMemo } from "react"
+import { useQuery } from "@tanstack/react-query"
+import { buscarPorId, toContenido } from "@/features/contenido/contenido-adapter"
+import { contenidosQueryOptions, ES_DEMO } from "@/lib/contenidos-query"
 
-/** Carga el detalle de un contenido por id, distinguiendo 404 de error real. */
+/** Detalle de un contenido, resuelto desde el listado cacheado.
+ *
+ *  `GET /api/contenidos/{id}` no existe en el backend, pero tampoco hace falta:
+ *  el listado ya devuelve el objeto completo de cada registro. Compartiendo la
+ *  clave de consulta con la biblioteca, venir desde una tarjeta es instantáneo
+ *  —los datos ya están— y entrar por URL directa carga el listado y busca dentro.
+ *
+ *  Cuando el backend implemente el endpoint, basta con cambiar este hook por su
+ *  propia `useQuery`; la página no se entera. */
 export function useContenido(id: string) {
-  const [contenido, setContenido] = useState<Contenido | null>(null)
-  const [demo, setDemo] = useState(false)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [notFound, setNotFound] = useState(false)
+  const { data: dtos, isPending, error } = useQuery(contenidosQueryOptions())
 
-  useEffect(() => {
-    const controller = new AbortController()
+  const contenido = useMemo(() => {
+    if (!dtos) return null
+    const dto = buscarPorId(dtos, id)
+    return dto ? toContenido(dto) : null
+  }, [dtos, id])
 
-    async function load() {
-      setLoading(true)
-      setError(null)
-      setNotFound(false)
-
-      const payload = await obtenerContenido(id, controller.signal)
-      if (controller.signal.aborted) return
-
-      setDemo(payload.demo)
-      setContenido(payload.data)
-      setNotFound(payload.notFound)
-      if (!payload.data && !payload.notFound) setError(payload.error ?? "Error desconocido")
-      setLoading(false)
-    }
-
-    void load()
-    return () => controller.abort()
-  }, [id])
-
-  return { contenido, demo, loading, error, notFound }
+  return {
+    contenido,
+    demo: ES_DEMO,
+    loading: isPending,
+    error: error ? error.message : null,
+    /** El listado cargó pero no hay ningún contenido con ese id. */
+    notFound: !isPending && !error && dtos !== undefined && contenido === null,
+  }
 }
