@@ -1,5 +1,7 @@
 import { useCallback, useState } from "react"
+import { useQueryClient } from "@tanstack/react-query"
 import { analizarArchivo, analizarContenido } from "@/features/analyzer/analyzer-service"
+import { queryKeys } from "@/lib/query-client"
 import { TEXT_LIMITS } from "@/config"
 import type { AnalisisResponse, AnalyzerMode } from "@/types"
 
@@ -9,6 +11,7 @@ import type { AnalisisResponse, AnalyzerMode } from "@/types"
  *  y `archivo` (se adjunta un documento). Adjuntar cambia el modo; quitar el
  *  archivo devuelve al textarea con lo que hubiera escrito antes. */
 export function useAnalyzer() {
+  const queryClient = useQueryClient()
   const [titulo, setTitulo] = useState("")
   const [texto, setTexto] = useState("")
   const [archivo, setArchivo] = useState<File | null>(null)
@@ -51,13 +54,18 @@ export function useAnalyzer() {
         return
       }
       setResult(payload.data)
+
+      // El análisis persiste un contenido nuevo, así que el listado cacheado de
+      // la biblioteca queda obsoleto. Sin esto, el usuario volvería a la
+      // biblioteca y no vería lo que acaba de crear.
+      if (!payload.demo) void queryClient.invalidateQueries({ queryKey: queryKeys.contenidos })
     } catch (caught) {
       setResult(null)
       setError(caught instanceof Error ? caught.message : "Error de red")
     } finally {
       setLoading(false)
     }
-  }, [archivo, canSubmit, texto, titulo])
+  }, [archivo, canSubmit, queryClient, texto, titulo])
 
   const reset = useCallback(() => {
     setTitulo("")
