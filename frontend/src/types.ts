@@ -29,6 +29,9 @@ export type ContenidoResumen = {
   informacion_adicional: Keyword[]
   similitud?: number
   creado_en?: string
+  /** Texto completo. No se muestra en la tarjeta: existe para que el buscador
+   *  de la biblioteca pueda filtrar por contenido sin volver a pedir datos. */
+  texto?: string
 }
 
 export type Contenido = ContenidoResumen & {

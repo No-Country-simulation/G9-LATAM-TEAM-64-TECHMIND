@@ -48,5 +48,6 @@ export function toContenidoResumen(dto: ContenidoBackendDTO): ContenidoResumen {
     probabilidad: toProbabilidad(dto.probabilidad),
     confianza: dto.confianza,
     creado_en: dto.fechaRegistro ?? undefined,
+    texto: dto.texto,
   }
 }

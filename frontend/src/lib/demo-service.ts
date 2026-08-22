@@ -10,7 +10,6 @@ import type {
   AnalisisInput,
   AnalisisResponse,
   Contenido,
-  ContenidoFiltros,
   ContenidoResumen,
   ListaContenidos,
 } from "@/types"
@@ -20,8 +19,8 @@ function delay(ms: number) {
 }
 
 function toResumen(contenido: Contenido): ContenidoResumen {
-  const { id, titulo, categoria, probabilidad, informacion_adicional, creado_en } = contenido
-  return { id, titulo, categoria, probabilidad, informacion_adicional, creado_en }
+  const { id, titulo, categoria, probabilidad, informacion_adicional, creado_en, texto } = contenido
+  return { id, titulo, categoria, probabilidad, informacion_adicional, creado_en, texto }
 }
 
 export async function demoAnalizarContenido(input: AnalisisInput): Promise<AnalisisResponse> {
@@ -57,20 +56,10 @@ export async function demoAnalizarArchivo(input: AnalisisArchivoInput): Promise<
   return { ...resultado, probabilidad: Math.min(resultado.probabilidad, 0.5) }
 }
 
-export function demoListarContenidos(filtros: ContenidoFiltros = {}): ListaContenidos {
-  const needle = (filtros.q ?? "").trim().toLowerCase()
-  const categoria = (filtros.categoria ?? "").trim()
-
-  const items = DEMO_CONTENIDOS.filter((contenido) => {
-    const matchCategoria = !categoria || contenido.categoria === categoria
-    const matchQuery =
-      !needle ||
-      contenido.titulo.toLowerCase().includes(needle) ||
-      contenido.texto.toLowerCase().includes(needle) ||
-      contenido.informacion_adicional.some((keyword) => keyword.toLowerCase().includes(needle))
-    return matchCategoria && matchQuery
-  }).map(toResumen)
-
+/** Listado completo de muestra. El filtrado lo aplica la biblioteca en memoria
+ *  con `filtrarContenidos`, igual que en modo API. */
+export function demoListarContenidos(): ListaContenidos {
+  const items = DEMO_CONTENIDOS.map(toResumen)
   return { total: items.length, items, categorias: DEMO_CATEGORIAS }
 }
 
