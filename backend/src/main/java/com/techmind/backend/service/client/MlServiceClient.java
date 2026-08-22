@@ -13,7 +13,7 @@ public class MlServiceClient {
 
     public MlServiceClient(
             WebClient.Builder webClientBuilder,
-            @Value("${ml.service.url:http://127.0.0.1:8001}") String mlServiceUrl
+            @Value("${ML_SERVICE_URL:http://127.0.0.1:8001}") String mlServiceUrl
     ) {
         this.webClient = webClientBuilder
                 .baseUrl(mlServiceUrl)
