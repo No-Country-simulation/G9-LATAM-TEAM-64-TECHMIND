@@ -8,7 +8,8 @@ import { SKELETON_ITEMS } from "@/config"
 /** Contenedor de la feature: búsqueda, filtros y rejilla de resultados. */
 export function Library() {
   const { t } = useLanguage()
-  const { query, setQuery, categoria, setCategoria, categorias, data, demo, loading, error } = useContenidos()
+  const { query, setQuery, categoria, setCategoria, categorias, data, demo, loading, revalidando, error } =
+    useContenidos()
 
   return (
     <div className="flex flex-col gap-6">
@@ -26,7 +27,7 @@ export function Library() {
         categoria={categoria}
         onCategoriaChange={setCategoria}
         categorias={categorias}
-        loading={loading}
+        loading={revalidando}
       />
 
       {error && <ErrorNotice title={t("library.error")} message={error} />}

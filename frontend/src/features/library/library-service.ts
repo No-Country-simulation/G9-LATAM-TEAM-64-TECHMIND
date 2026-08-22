@@ -1,29 +1,28 @@
-/** Listado y filtrado de contenidos ya procesados (GET /contenidos).
+/** Listado de contenidos ya procesados (GET /api/contenidos).
  *
- *  El backend no soporta `q`/`categoria` como query params: devuelve todo el
- *  listado y `library-adapter.ts` filtra en el cliente. */
+ *  Devuelve el listado completo. El filtrado por texto y categoría lo hace la
+ *  biblioteca en memoria con `filtrarContenidos`: el backend no admite query
+ *  params, así que pedirle un subconjunto no ahorraría nada.
+ *
+ *  Cuando el listado crezca lo suficiente para que traerlo entero deje de ser
+ *  viable, el filtrado vuelve al servidor — pero junto con paginación, que es
+ *  lo que lo justifica.
+ */
 
 import { toListaContenidos } from "@/features/library/library-adapter"
 import { apiRequest, toErrorMessage } from "@/lib/api-client"
 import { demoListarContenidos } from "@/lib/demo-service"
-import type { ApiEnvelope, ContenidoBackendDTO } from "@/types"
-import type { ContenidoFiltros, ListaContenidos } from "@/types"
+import type { ApiEnvelope, ContenidoBackendDTO, ListaContenidos } from "@/types"
 import { API_CONFIGURED, ENDPOINTS } from "@/config"
 
-export async function listarContenidos(
-  filtros: ContenidoFiltros = {},
-  signal?: AbortSignal,
-): Promise<ApiEnvelope<ListaContenidos>> {
-  const q = filtros.q?.trim() ?? ""
-  const categoria = filtros.categoria?.trim() ?? ""
-
+export async function listarContenidos(signal?: AbortSignal): Promise<ApiEnvelope<ListaContenidos>> {
   if (!API_CONFIGURED) {
-    return { data: demoListarContenidos({ q, categoria }), error: null, demo: true }
+    return { data: demoListarContenidos(), error: null, demo: true }
   }
 
   try {
     const dtos = await apiRequest<ContenidoBackendDTO[]>(ENDPOINTS.contenidos, { signal })
-    return { data: toListaContenidos(dtos, { q, categoria }), error: null, demo: false }
+    return { data: toListaContenidos(dtos), error: null, demo: false }
   } catch (error) {
     return { data: null, error: toErrorMessage(error), demo: false }
   }
