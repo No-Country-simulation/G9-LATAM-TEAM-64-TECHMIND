@@ -31,13 +31,14 @@ export const ROUTES = {
 
 /** Endpoints de la API del modelo, relativos a `API_BASE`. */
 export const ENDPOINTS = {
-  analizar: "/contenidos/procesar",
+  analizar: "/api/contenidos/procesar",
   /** TODO: ruta provisional. Confirmar con backend el path y el nombre del campo
    *  del `multipart/form-data` (ver `ARCHIVO_FORM_FIELD`) antes de integrar. */
-  analizarArchivo: "/contenido/archivo",
-  contenidos: "/contenidos",
-  contenidoPorId: (id: string) => `/contenidos/${encodeURIComponent(id)}`,
+  analizarArchivo: "/api/contenidos/archivo",
+  contenidos: "/api/contenidos",
+  contenidoPorId: (id: string) => `/api/contenidos/${encodeURIComponent(id)}`,
 } as const
+
 
 // --- Comportamiento ----------------------------------------------------------
 
@@ -53,9 +54,8 @@ export const ARCHIVO_MAX_BYTES = 10 * 1024 * 1024
  *  la validación de formato la hace el backend. */
 export const ARCHIVO_ACCEPT = ""
 
-/** Nombre del campo del archivo dentro del `multipart/form-data`.
- *  TODO: confirmar con backend (¿`archivo`, `file`, `documento`?). */
-export const ARCHIVO_FORM_FIELD = "archivo"
+/** Nombre del campo del archivo dentro del `multipart/form-data`. */
+export const ARCHIVO_FORM_FIELD = "file"
 
 /** Extensiones que el modo demo sabe leer en el navegador. El resto se simula. */
 export const ARCHIVO_DEMO_LEGIBLE = [".txt", ".md", ".markdown", ".csv", ".json"] as const

@@ -27,4 +27,9 @@ public class ContenidoController {
     public ResponseEntity<ContenidoResponseDTO> processContent(@RequestBody ContenidoRequestDTO request) {
         return ResponseEntity.status(201).body(contenidoService.processAndSave(request));
     }
+
+    @PostMapping("/archivo")
+    public ResponseEntity<ContenidoResponseDTO> processFile(@RequestParam("archivo") org.springframework.web.multipart.MultipartFile file) {
+        return ResponseEntity.status(201).body(contenidoService.processFileAndSave(file));
+    }
 }
