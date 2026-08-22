@@ -36,8 +36,12 @@ export type ContenidoResumen = {
 
 export type Contenido = ContenidoResumen & {
   texto: string
+  /** `resumenCorto` del backend: resumen breve generado por el servicio de ML. */
   resumen?: string
-  relacionados?: ContenidoResumen[]
+  /** `temasRelacionados` del backend: nombres de temas derivados de la categoría,
+   *  no referencias a otros contenidos. Se muestran como etiquetas, no como
+   *  tarjetas enlazables. */
+  temas?: string[]
 }
 
 /** Traducción entre el contrato del backend y el modelo que usa la interfaz.
@@ -47,7 +51,9 @@ export type Contenido = ContenidoResumen & {
  * numérica almacenada como string.
  */
 export type ContenidoBackendDTO = {
-  id: number
+  /** El backend usa `Long`; el dataset de muestra usa ids como "c-001". Se
+   *  normaliza a `string` en los adaptadores. */
+  id: number | string
   titulo: string
   texto: string
   categoria: string | null
