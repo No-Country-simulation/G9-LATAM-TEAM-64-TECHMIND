@@ -5,7 +5,8 @@
 
 export const DICT = {
   es: {
-    "brand.name": "Sin nombre",
+    "brand.name": "TechMind",
+    "brand.by": "by Orbit Lab",
     "brand.tagline": "Base de conocimiento técnico inteligente",
     "nav.analizar": "Analizar",
     "nav.biblioteca": "Biblioteca",
@@ -74,9 +75,15 @@ export const DICT = {
     "demo.body":
       "Define la variable de entorno CONTENIDO_API_URL con la URL de la API desplegada en OCI. Mientras tanto, la interfaz usa un conjunto de datos local de ejemplo.",
     "footer.note": "MVP de organización inteligente de contenido técnico.",
+    "footer.equipo": "Desarrollado por Orbit Lab",
+    "footer.repo": "Ver repositorio",
+    "footer.copyright": "© 2026 Orbit Lab. Proyecto desarrollado durante la simulación laboral de No Country.",
+    "footer.linkedinDe": "LinkedIn de",
+    "footer.githubDe": "GitHub de",
   },
   en: {
-    "brand.name": "Sin nombre",
+    "brand.name": "TechMind",
+    "brand.by": "by Orbit Lab",
     "brand.tagline": "Intelligent technical knowledge base",
     "nav.analizar": "Analyze",
     "nav.biblioteca": "Library",
@@ -145,6 +152,11 @@ export const DICT = {
     "demo.body":
       "Set the CONTENIDO_API_URL environment variable to the URL of the API deployed on OCI. Until then, the interface uses a local sample dataset.",
     "footer.note": "MVP for intelligent technical content organization.",
+    "footer.equipo": "Built by Orbit Lab",
+    "footer.repo": "View repository",
+    "footer.copyright": "© 2026 Orbit Lab. Built during the No Country work simulation.",
+    "footer.linkedinDe": "LinkedIn profile of",
+    "footer.githubDe": "GitHub profile of",
   },
 } as const
 

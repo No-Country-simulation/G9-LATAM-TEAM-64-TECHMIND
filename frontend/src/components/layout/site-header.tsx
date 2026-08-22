@@ -1,5 +1,6 @@
 import { NavLink, Link } from "react-router-dom"
-import { Layers, Library, ScanText } from "lucide-react"
+import { Library, ScanText } from "lucide-react"
+import { OrbitLabLogo } from "@/components/common/brand-icons"
 import { LanguageToggle } from "@/components/layout/language-toggle"
 import { ROUTES } from "@/config"
 import { useLanguage } from "@/language-context"
@@ -17,12 +18,10 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-border/80 bg-background/85 backdrop-blur-md">
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center gap-4 px-4 sm:px-6">
         <Link to={ROUTES.home} className="flex items-center gap-2.5">
-          <span className="flex size-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
-            <Layers className="size-4" aria-hidden="true" />
-          </span>
+          <OrbitLabLogo className="size-8 shrink-0 text-primary" aria-hidden="true" />
           <span className="flex flex-col leading-none">
             <span className="text-sm font-semibold tracking-tight">{t("brand.name")}</span>
-            <span className="hidden text-[11px] text-muted-foreground sm:block">{t("brand.tagline")}</span>
+            <span className="text-[11px] text-muted-foreground">{t("brand.by")}</span>
           </span>
         </Link>
 
