@@ -77,18 +77,8 @@ export function AnalyzerHero() {
     className="relative z-10 w-[115%] max-w-[650px] object-contain drop-shadow-[0_0_60px_rgba(139,92,246,0.35)]"
   />
 </div>
-        </div>
 
-        <div className="relative hidden min-h-[460px] items-center justify-center lg:flex">
-  <div className="absolute size-[26rem] rounded-full bg-primary/20 blur-3xl" />
-
-  <img
-    src="/techmind-hero-visual.png"
-    alt="Visual de documento técnico estructurado en JSON"
-    className="relative z-10 w-[115%] max-w-[650px] object-contain drop-shadow-[0_0_60px_rgba(139,92,246,0.35)]"
-  />
 </div>
-      </div>
-    </section>
-  )
+</section>
+)
 }

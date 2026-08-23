@@ -16,7 +16,7 @@ export const API_CONFIGURED = API_BASE.length > 0
 export const API_KEY = (import.meta.env.VITE_API_KEY ?? "").trim()
 
 /** Tiempo máximo de espera de una petición, en milisegundos. */
-export const API_TIMEOUT_MS = 20_000
+export const API_TIMEOUT_MS = 35_000
 
 // --- Rutas y endpoints -------------------------------------------------------
 
@@ -58,7 +58,7 @@ export const ARCHIVO_MAX_BYTES = 10 * 1024 * 1024
 export const ARCHIVO_ACCEPT = ""
 
 /** Nombre del campo del archivo dentro del `multipart/form-data`. */
-export const ARCHIVO_FORM_FIELD = "file"
+export const ARCHIVO_FORM_FIELD = "archivo"
 
 /** Extensiones que el modo demo sabe leer en el navegador. El resto se simula. */
 export const ARCHIVO_DEMO_LEGIBLE = [".txt", ".md", ".markdown", ".csv", ".json"] as const
