@@ -13,7 +13,7 @@ export type TeamMember = {
 export const ORBIT_LAB_TEAM: TeamMember[] = [
   {
     nombre: "Verónica Polaya",
-    linkedin: "https://linkedin.com/in/veronica",
+    linkedin: "https://www.linkedin.com/in/verónica-apolaya",
     github: "https://github.com/Veronicapolaya",
   },
   {
