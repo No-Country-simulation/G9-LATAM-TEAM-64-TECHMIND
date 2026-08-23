@@ -6,6 +6,7 @@ import { demoAnalizarArchivo, demoAnalizarContenido } from "@/lib/demo-service"
 import type { AnalisisArchivoInput, AnalisisInput, AnalisisResponse, ApiEnvelope } from "@/types"
 import {
   API_CONFIGURED,
+  ARCHIVO_FORMATOS,
   ARCHIVO_FORM_FIELD,
   ARCHIVO_MAX_BYTES,
   ENDPOINTS,
@@ -54,14 +55,30 @@ function formatBytes(bytes: number): string {
   return `${(bytes / 1024 / 1024).toFixed(0)} MB`
 }
 
-/** Valida el documento antes de subirlo. */
+/** Valida el documento antes de subirlo.
+ *
+ *  El atributo `accept` del input solo filtra lo que muestra el selector: el
+ *  usuario puede cambiar a "todos los archivos" y elegir cualquier cosa. Por
+ *  eso la extensión se comprueba aquí también. */
 export function validarArchivo(archivo: File | null): string | null {
   if (!archivo) return "Selecciona un documento para analizar."
   if (archivo.size === 0) return "El documento está vacío."
   if (archivo.size > ARCHIVO_MAX_BYTES) {
     return `El documento supera el máximo de ${formatBytes(ARCHIVO_MAX_BYTES)}.`
   }
+
+  const nombre = archivo.name.toLowerCase()
+  if (!ARCHIVO_FORMATOS.some((ext) => nombre.endsWith(ext))) {
+    return `Formato no admitido. Solo se aceptan ${listarFormatos()}.`
+  }
+
   return null
+}
+
+/** "TXT, PDF o DOCX" — para mensajes y para la ayuda del formulario. */
+export function listarFormatos(): string {
+  const nombres = ARCHIVO_FORMATOS.map((ext) => ext.replace(".", "").toUpperCase())
+  return `${nombres.slice(0, -1).join(", ")} o ${nombres.at(-1)}`
 }
 
 /** Sube un documento al modelo como `multipart/form-data`.

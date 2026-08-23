@@ -29,8 +29,15 @@ public class ContenidoController {
         return ResponseEntity.status(201).body(contenidoService.processAndSave(request));
     }
 
+    /** Sube un documento (TXT, PDF o DOCX). Tika extrae el texto.
+     *
+     *  El `titulo` es opcional: si el formulario no lo manda, se usa el que
+     *  se deduzca de los metadatos del documento o de su nombre de archivo. */
     @PostMapping("/archivo")
-    public ResponseEntity<ContenidoResponseDTO> processFile(@RequestParam("archivo") org.springframework.web.multipart.MultipartFile file) {
-        return ResponseEntity.status(201).body(contenidoService.processFileAndSave(file));
+    public ResponseEntity<ContenidoResponseDTO> processFile(
+            @RequestParam("archivo") org.springframework.web.multipart.MultipartFile file,
+            @RequestParam(value = "titulo", required = false) String titulo
+    ) {
+        return ResponseEntity.status(201).body(contenidoService.processAndSaveFromFile(file, titulo));
     }
 }

@@ -53,9 +53,20 @@ export const TEXT_LIMITS = { min: 30, max: 20_000 } as const
 /** Tamaño máximo aceptado del documento, en bytes (10 MB). */
 export const ARCHIVO_MAX_BYTES = 10 * 1024 * 1024
 
-/** Valor del atributo `accept` del input. Cadena vacía = sin restricción;
- *  la validación de formato la hace el backend. */
-export const ARCHIVO_ACCEPT = ""
+/** Formatos admitidos, tal y como se muestran al usuario. */
+export const ARCHIVO_FORMATOS = [".txt", ".pdf", ".docx"] as const
+
+/** Valor del atributo `accept` del input.
+ *
+ *  Se listan las extensiones y también los tipos MIME: Windows y macOS filtran
+ *  por criterios distintos, y con solo uno de los dos algún selector acaba
+ *  mostrando archivos que luego se rechazan. */
+export const ARCHIVO_ACCEPT = [
+  ...ARCHIVO_FORMATOS,
+  "text/plain",
+  "application/pdf",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+].join(",")
 
 /** Nombre del campo del archivo dentro del `multipart/form-data`. */
 export const ARCHIVO_FORM_FIELD = "archivo"
