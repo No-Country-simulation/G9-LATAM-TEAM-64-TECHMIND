@@ -6,14 +6,15 @@ import com.techmind.backend.dto.MlResponseDTO;
 import com.techmind.backend.model.Contenido;
 import com.techmind.backend.repository.ContenidoRepository;
 import com.techmind.backend.service.client.MlServiceClient;
+import org.apache.tika.exception.TikaException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.xml.sax.SAXException;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,32 +33,36 @@ public class ContenidoService {
         this.extractionService = extractionService;
     }
 
-    // Sin @Transactional, por lo mismo que processAndSave: extraer el texto con
-    // Tika y clasificarlo son operaciones lentas que no deben retener una
-    // conexión de la base de datos.
-    public ContenidoResponseDTO processAndSaveFromFile(org.springframework.web.multipart.MultipartFile file) throws java.io.IOException, org.apache.tika.exception.TikaException, org.xml.sax.SAXException {
-        ContenidoRequestDTO request = extractionService.extractContent(file);
-        return processAndSave(request);
-    }
+    /** Extrae el texto del documento con Tika y lo clasifica.
+     *
+     *  Sin @Transactional, por lo mismo que processAndSave: extraer y clasificar
+     *  son operaciones lentas que no deben retener una conexión de la base.
+     *
+     *  @param tituloFormulario el que escribió el usuario. Si viene vacío o
+     *                          nulo, se conserva el que dedujo Tika de los
+     *                          metadatos del documento o de su nombre. */
+    public ContenidoResponseDTO processAndSaveFromFile(MultipartFile file, String tituloFormulario) {
+        ContenidoRequestDTO request;
 
-    public ContenidoResponseDTO processFileAndSave(MultipartFile file) {
         try {
-            String contentType = file.getContentType();
-            String textoExtraido;
-
-            // Para el MVP, solo procesamos archivos de texto explícitos.
-            // Los archivos binarios como PDF/Word requieren Apache Tika, que añadiremos más adelante.
-            if (contentType != null && (contentType.startsWith("text/") || contentType.equals("application/json"))) {
-                textoExtraido = new String(file.getBytes(), StandardCharsets.UTF_8);
-            } else {
-                textoExtraido = "Archivo (" + file.getOriginalFilename() + ") subido. Extracción de texto pendiente de implementación (requiere Tika).";
-            }
-
-            ContenidoRequestDTO request = new ContenidoRequestDTO(file.getOriginalFilename(), textoExtraido);
-            return processAndSave(request);
-        } catch (IOException e) {
-            throw new RuntimeException("Error al procesar el archivo", e);
+            request = extractionService.extractContent(file);
+        } catch (IOException | TikaException | SAXException e) {
+            log.error("No se pudo extraer el texto de '{}'", file.getOriginalFilename(), e);
+            throw new RuntimeException(
+                    "No se pudo leer el documento '" + file.getOriginalFilename() + "'. "
+                            + "Comprueba que sea un TXT, PDF o DOCX válido.", e);
         }
+
+        // El título del formulario manda sobre el del archivo.
+        if (tituloFormulario != null && !tituloFormulario.isBlank()) {
+            request.setTitulo(tituloFormulario.trim());
+        }
+
+        log.info("Documento '{}' — título: '{}', {} caracteres extraídos",
+                file.getOriginalFilename(), request.getTitulo(),
+                request.getTexto() == null ? 0 : request.getTexto().length());
+
+        return processAndSave(request);
     }
 
     /** Clasifica y guarda.

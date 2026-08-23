@@ -79,7 +79,17 @@ export function FileAttachment({ archivo, onAttach, onClear, disabled = false }:
         <Paperclip className="size-3.5" aria-hidden="true" />
         {t("analyzer.fileAttach")}
       </Button>
-      <span className="text-xs text-muted-foreground">{t("analyzer.fileHint")}</span>
+
+      {/* Los formatos van destacados: es la restricción que el usuario necesita
+          conocer ANTES de abrir el selector, no después de que se lo rechacen. */}
+      <span className="flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
+        <span className="rounded border border-border bg-muted/60 px-1.5 py-0.5 font-mono text-[10px] font-medium tracking-wide text-foreground">
+          {t("analyzer.fileFormats")}
+        </span>
+        <span>{t("analyzer.fileMaxSize")}</span>
+        <span aria-hidden="true">·</span>
+        <span>{t("analyzer.fileHint")}</span>
+      </span>
     </div>
   )
 }
