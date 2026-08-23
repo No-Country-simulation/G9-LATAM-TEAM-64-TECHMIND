@@ -58,3 +58,35 @@
     @apply bg-background text-foreground;
   }
 }
+
+html {
+  min-height: 100%;
+  background: #070914;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      circle at 75% 10%,
+      rgba(111, 45, 255, 0.16),
+      transparent 30rem
+    ),
+    radial-gradient(
+      circle at 15% 35%,
+      rgba(77, 35, 160, 0.09),
+      transparent 26rem
+    ),
+    linear-gradient(
+      180deg,
+      #080a18 0%,
+      #090b19 45%,
+      #070914 100%
+    );
+  background-attachment: fixed;
+}
+
+::selection {
+  background: rgba(139, 92, 246, 0.35);
+  color: white;
+}
