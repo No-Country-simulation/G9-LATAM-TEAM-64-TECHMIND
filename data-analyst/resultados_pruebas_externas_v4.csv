@@ -1,0 +1,7 @@
+prueba,esperada,predicha_v4,correcta,confianza_v4,segunda_categoria,segunda_probabilidad,margen_v4,requiere_revision
+1,Backend,Backend,True,0.2539,Bases de Datos,0.2314,0.0225,True
+2,Backend,Frontend,False,0.2389,Backend,0.2347,0.0042,True
+3,Backend,Frontend,False,0.2699,Backend,0.2263,0.0436,True
+4,Backend,Backend,True,0.3465,Frontend,0.1852,0.1613,False
+5,Data Science,Data Science,True,0.3868,Cloud/DevOps,0.1574,0.2294,False
+6,Cloud/DevOps,Cloud/DevOps,True,0.3611,Frontend,0.197,0.164,False

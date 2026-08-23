@@ -1,51 +1,66 @@
-import { useEffect, useMemo, useState } from "react"
-import { SEARCH_DEBOUNCE_MS } from "@/config"
+import { useMemo, useState } from "react"
+import { useQuery } from "@tanstack/react-query"
+import { filtrarContenidos } from "@/features/library/library-adapter"
 import { listarContenidos } from "@/features/library/library-service"
-import { useDebounce } from "@/lib/use-debounce"
+import { queryKeys } from "@/lib/query-client"
 import type { ListaContenidos } from "@/types"
 
-/** Búsqueda con debounce y filtro por categoría sobre la biblioteca. */
+type ContenidosQueryResult = {
+  lista: ListaContenidos
+  demo: boolean
+}
+
+/** Los servicios devuelven `ApiEnvelope` y nunca lanzan. TanStack Query espera
+ *  lo contrario: necesita una excepción para pasar al estado de error. Aquí se
+ *  hace esa traducción. */
+async function fetchContenidos({ signal }: { signal: AbortSignal }): Promise<ContenidosQueryResult> {
+  const payload = await listarContenidos(signal)
+  if (!payload.data) throw new Error(payload.error ?? "Error desconocido")
+  return { lista: payload.data, demo: payload.demo }
+}
+
+/** Estado de la biblioteca.
+ *
+ *  El listado se cachea en memoria, así que volver desde otra ruta muestra los
+ *  datos al instante y revalida por detrás si están obsoletos. El filtrado por
+ *  texto y categoría ocurre sobre lo ya cargado, sin tocar la red. */
 export function useContenidos() {
   const [query, setQuery] = useState("")
   const [categoria, setCategoria] = useState("")
-  const [data, setData] = useState<ListaContenidos | null>(null)
-  const [demo, setDemo] = useState(false)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
 
-  const debouncedQuery = useDebounce(query.trim(), SEARCH_DEBOUNCE_MS)
+  const {
+    data: resultado,
+    isPending,
+    isFetching,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: queryKeys.contenidos,
+    queryFn: fetchContenidos,
+  })
 
-  useEffect(() => {
-    const controller = new AbortController()
+  const lista = resultado?.lista ?? null
 
-    async function load() {
-      setLoading(true)
-      setError(null)
-      try {
-        const payload = await listarContenidos({ q: debouncedQuery, categoria }, controller.signal)
-        if (controller.signal.aborted) return
+  const data = useMemo(
+    () => (lista ? filtrarContenidos(lista, { q: query, categoria }) : null),
+    [lista, query, categoria],
+  )
 
-        setDemo(payload.demo)
-        if (!payload.data) {
-          setData(null)
-          setError(payload.error ?? "Error desconocido")
-          return
-        }
-        setData(payload.data)
-      } catch (caught) {
-        if (controller.signal.aborted) return
-        setData(null)
-        setError(caught instanceof Error ? caught.message : "Error de red")
-      } finally {
-        if (!controller.signal.aborted) setLoading(false)
-      }
-    }
+  const categorias = useMemo(() => lista?.categorias ?? [], [lista])
 
-    void load()
-    return () => controller.abort()
-  }, [debouncedQuery, categoria])
-
-  const categorias = useMemo(() => data?.categorias ?? [], [data])
-
-  return { query, setQuery, categoria, setCategoria, categorias, data, demo, loading, error }
+  return {
+    query,
+    setQuery,
+    categoria,
+    setCategoria,
+    categorias,
+    data,
+    demo: resultado?.demo ?? false,
+    /** Primera carga: no hay nada que mostrar todavía. Usa el skeleton. */
+    loading: isPending,
+    /** Hay datos en pantalla y se está revalidando por detrás. Indicador sutil. */
+    revalidando: isFetching && !isPending,
+    error: error ? error.message : null,
+    recargar: refetch,
+  }
 }

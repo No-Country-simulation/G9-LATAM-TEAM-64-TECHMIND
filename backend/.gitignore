@@ -1,4 +1,4 @@
-HELP.md
+vscode_lsp_terminal_prompt_tracker= {}
 target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
@@ -29,5 +29,9 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### VS Code ###
-.vscode/
+### Env files ###
+.env
+application-*.properties
+
+#sdkman
+.sdkmanrc

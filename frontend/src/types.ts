@@ -23,15 +23,42 @@ export type ContenidoResumen = {
   titulo: string
   categoria: string
   probabilidad: number
+  /** "alta" | "media" | "baja" para registros nuevos; registros antiguos
+   *  pueden traer otro formato heredado (ver `analyzer-adapter.ts`). */
+  confianza?: string | null
   informacion_adicional: Keyword[]
   similitud?: number
   creado_en?: string
+  /** Texto completo. No se muestra en la tarjeta: existe para que el buscador
+   *  de la biblioteca pueda filtrar por contenido sin volver a pedir datos. */
+  texto?: string
 }
 
 export type Contenido = ContenidoResumen & {
   texto: string
   resumen?: string
   relacionados?: ContenidoResumen[]
+}
+
+/** Traducción entre el contrato del backend y el modelo que usa la interfaz.
+ *
+ * El backend devuelve la probabilidad numérica y el nivel textual de confianza.
+ * Para registros antiguos, el adaptador conserva como respaldo la confianza
+ * numérica almacenada como string.
+ */
+export type ContenidoBackendDTO = {
+  id: number
+  titulo: string
+  texto: string
+  categoria: string | null
+  etiquetas: string[] | null
+  confianza: string | null
+  probabilidad: number | null
+  palabrasClave: string[] | null
+  temasRelacionados: string[] | null
+  resumenCorto: string | null
+  requiereRevision: boolean
+  fechaRegistro: string
 }
 
 export type ListaContenidos = {
