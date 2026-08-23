@@ -9,7 +9,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/contenidos")
-@CrossOrigin(origins = "http://localhost:5173")
+// Para el MVP se permite cualquiera; conviene fijar la URL real al desplegar.
+@CrossOrigin(origins = "*")
 public class ContenidoController {
 
     private final ContenidoService contenidoService;

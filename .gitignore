@@ -34,3 +34,6 @@ next-env.d.ts
 
 # VS Code
 .vscode/
+
+# Variables de entorno del despliegue
+.env
