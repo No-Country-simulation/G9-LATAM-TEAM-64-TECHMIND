@@ -104,24 +104,29 @@ De esta manera, los documentos dejan de ser archivos aislados y se convierten en
 
 ```mermaid
 flowchart LR
-    A[Frontend\nReact + TypeScript] -->|HTTP| B[Backend\nSpring Boot]
-    B -->|Título y texto| C[ML Service\nFastAPI]
+    A[Frontend\nReact + TypeScript] -->|HTTP| B[Backend\nSpring Boot - NorthFlank]
+    B -->|Título y texto| C[ML Service\nFastAPI - NorthFlank]
     C -->|Predicción| B
     B --> D[(PostgreSQL\nRailway)]
     C -. carga del modelo .-> E[OCI Object Storage]
 ```
 
-![Arquitectura de TechMind](docs/images/techmind_architecture_v2.png)
-
 ### Responsabilidad de cada componente
 
-| Componente | Responsabilidad |
-|---|---|
-| Frontend | Captura el texto o documento y presenta los resultados. |
-| Backend | Centraliza la extracción, preparación, integración y persistencia. |
-| ML Service | Clasifica el contenido y obtiene la probabilidad y palabras clave. |
-| PostgreSQL | Conserva el historial de contenidos procesados. |
-| OCI Object Storage | Almacena el artefacto entrenado del modelo. |
+| Componente | Responsabilidad | Hosting |
+|---|---|---|
+| Frontend | Captura el texto o documento y presenta los resultados. | Vercel |
+| Backend | Centraliza la extracción, preparación, integración y persistencia. | NorthFlank |
+| ML Service | Clasifica el contenido y obtiene la probabilidad y palabras clave. | NorthFlank |
+| PostgreSQL | Conserva el historial de contenidos procesados. | Railway |
+| OCI Object Storage | Almacena el artefacto entrenado del modelo. | Oracle Cloud |
+
+### Descripción de componentes
+
+- **Frontend:** Aplicación interactiva construida con React, TypeScript y Vite. Gestiona la interfaz de usuario, captura texto o documentos, y consume los servicios del Backend.
+- **Backend:** Desarrollado con Spring Boot (Java 21). Actúa como orquestador, procesa documentos (extracción de texto), coordina la comunicación con el servicio de ML y gestiona la persistencia de datos.
+- **ML Service (FastAPI):** Servicio de inferencia ligero en Python. Expone endpoints para recibir el contenido, invoca el modelo entrenado y retorna las predicciones, palabras clave y resúmenes.
+- **ML Model:** Modelo de clasificación basado en regresión logística y técnicas de PNL (TF-IDF), entrenado para clasificar contenido técnico y almacenado en OCI Object Storage.
 
 ---
 
@@ -180,7 +185,7 @@ La evaluación registrada alcanzó aproximadamente **95 % de accuracy** sobre el
 | Backend | Java 21, Spring Boot 3.4, Maven, Spring Data JPA y Hibernate |
 | Machine Learning | Python, FastAPI, Uvicorn, scikit-learn, TF-IDF, Logistic Regression y joblib |
 | Base de datos | PostgreSQL en Railway |
-| Nube | Oracle Cloud Infrastructure Object Storage |
+| Nube | NorthFlank (Backend/ML), Railway (DB), Vercel (Frontend), OCI (Object Storage) |
 | Contenedores | Docker |
 | Control de versiones | Git y GitHub |
 
@@ -442,7 +447,7 @@ En todos los casos se generaron categoría, palabras clave, temas relacionados y
 
 Proyecto desarrollado por **G9 LATAM · Team 64** durante el Hackathon ONE de No Country.
 
-## Integrantes del equipo
+### Integrantes del equipo
 
 | Integrante | Rol | Contribución |
 |---|---|---|
@@ -451,15 +456,12 @@ Proyecto desarrollado por **G9 LATAM · Team 64** durante el Hackathon ONE de No
 | Félix Robert Aguilar Barrera | Back-End Developer | Creación del controlador de contenidos y definición inicial de los endpoints REST para procesar y consultar contenidos. |
 | Verónica Apolaya | Data Analyst / Machine Learning | Preparación del dataset, EDA, entrenamiento y evaluación del modelo, integración ML, pruebas end-to-end y documentación. |
 
-> Antes de publicar la versión final, completar los nombres y aportes de todos los integrantes.
-
 ---
 
 ## Recursos
 
 - [Repositorio del proyecto](https://github.com/No-Country-simulation/G9-LATAM-TEAM-64-TECHMIND)
-- Demo desplegada: `pendiente de agregar`
-- Video de presentación: `pendiente de agregar`
+- Demo desplegada: [techmind-frontend-test.vercel.app](https://techmind-frontend-test.vercel.app)
 
 ---
 
