@@ -102,8 +102,8 @@ De esta manera, los documentos dejan de ser archivos aislados y se convierten en
 
 ## Arquitectura
 
-![Arquitectura TechMind Diagrama](docs\images\techmind_architecture_Diag.png)
-![Arquitectura TechMind](docs\images\techmind_architecture_v2.png)
+![Arquitectura TechMind Diagrama](docs/images/techmind_architecture_Diag.png)
+![Arquitectura TechMind](docs/images/techmind_architecture_v2.png)
 
 ### Responsabilidad de cada componente
 
