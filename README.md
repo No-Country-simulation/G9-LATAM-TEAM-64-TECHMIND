@@ -102,14 +102,8 @@ De esta manera, los documentos dejan de ser archivos aislados y se convierten en
 
 ## Arquitectura
 
-```mermaid
-flowchart LR
-    A[Frontend\nReact + TypeScript] -->|HTTP| B[Backend\nSpring Boot - NorthFlank]
-    B -->|Título y texto| C[ML Service\nFastAPI - NorthFlank]
-    C -->|Predicción| B
-    B --> D[(PostgreSQL\nRailway)]
-    C -. carga del modelo .-> E[OCI Object Storage]
-```
+![Arquitectura TechMind Diagrama](docs\images\techmind_architecture_Diag.png)
+![Arquitectura TechMind](docs\images\techmind_architecture_v2.png)
 
 ### Responsabilidad de cada componente
 
