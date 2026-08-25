@@ -347,7 +347,7 @@ Content-Type: multipart/form-data
 Campo del formulario:
 
 ```text
-file: documento.txt | documento.pdf | documento.docx
+archivo: documento.txt | documento.pdf | documento.docx
 ```
 
 ### Consultar contenidos
