@@ -12,7 +12,7 @@
 ![FastAPI](https://img.shields.io/badge/FastAPI-ML_Service-009688?logo=fastapi&logoColor=white)
 ![scikit-learn](https://img.shields.io/badge/scikit--learn-ML-F7931E?logo=scikitlearn&logoColor=white)
 ![React](https://img.shields.io/badge/React-TypeScript-61DAFB?logo=react&logoColor=black)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Railway-4169E1?logo=postgresql&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-4169E1?logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)
 
 **Hackathon ONE · No Country · G9 LATAM · Team 64**
@@ -102,8 +102,7 @@ De esta manera, los documentos dejan de ser archivos aislados y se convierten en
 
 ## Arquitectura
 
-![Arquitectura TechMind Diagrama](docs/images/techmind_architecture_Diag.png)
-![Arquitectura TechMind](docs/images/techmind_architecture_v2.png)
+![Arquitectura TechMind](docs/images/techmind_architecture_final1.png)
 
 ### Responsabilidad de cada componente
 
@@ -112,7 +111,7 @@ De esta manera, los documentos dejan de ser archivos aislados y se convierten en
 | Frontend | Captura el texto o documento y presenta los resultados. | Vercel |
 | Backend | Centraliza la extracción, preparación, integración y persistencia. | NorthFlank |
 | ML Service | Clasifica el contenido y obtiene la probabilidad y palabras clave. | NorthFlank |
-| PostgreSQL | Conserva el historial de contenidos procesados. | Railway |
+| PostgreSQL | Conserva el historial de contenidos procesados. | Neon (DB) |
 | OCI Object Storage | Almacena el artefacto entrenado del modelo. | Oracle Cloud |
 
 ### Descripción de componentes
@@ -144,6 +143,19 @@ Texto técnico → TF-IDF → Logistic Regression → Categoría y probabilidad
 - Artefacto estable: `modelo_techmind_v3.joblib`.
 
 La evaluación registrada alcanzó aproximadamente **95 % de accuracy** sobre el conjunto de prueba. Debido al tamaño actual del dataset, esta métrica debe interpretarse como un resultado inicial del MVP y no como una garantía de desempeño sobre cualquier contenido.
+
+### Integración con Oracle Cloud Infrastructure (OCI)
+
+TechMind utiliza **OCI Object Storage** para almacenar los artefactos serializados del modelo de Machine Learning.
+
+Durante el desarrollo del MVP se almacenaron en el bucket `techmind-storage` las siguientes versiones:
+
+- `modelo_techmind_v2.joblib`
+- `modelo_techmind_v3.joblib`
+
+La versión `modelo_techmind_v3.joblib` corresponde al artefacto estable utilizado para el cierre del MVP.
+
+OCI Object Storage permite conservar los artefactos del modelo de forma independiente a la persistencia de contenidos y resultados, gestionada mediante PostgreSQL.
 
 ### Salida del modelo
 
@@ -178,8 +190,8 @@ La evaluación registrada alcanzó aproximadamente **95 % de accuracy** sobre el
 | Frontend | React, TypeScript, Vite y CSS |
 | Backend | Java 21, Spring Boot 3.4, Maven, Spring Data JPA y Hibernate |
 | Machine Learning | Python, FastAPI, Uvicorn, scikit-learn, TF-IDF, Logistic Regression y joblib |
-| Base de datos | PostgreSQL en Railway |
-| Nube | NorthFlank (Backend/ML), Railway (DB), Vercel (Frontend), OCI (Object Storage) |
+| Base de datos | PostgreSQL en Neon (DB) |
+| Nube | NorthFlank (Backend/ML), Neon (DB), Vercel (Frontend), OCI (Object Storage) |
 | Contenedores | Docker |
 | Control de versiones | Git y GitHub |
 
@@ -402,7 +414,7 @@ El build de producción fue completado correctamente.
 Las pruebas validaron el flujo completo:
 
 ```text
-Frontend → Backend → extracción → modelo v3 → PostgreSQL en Railway
+Frontend → Backend → extracción → modelo v3 → PostgreSQL en Neon (DB)
 ```
 
 En todos los casos se generaron categoría, palabras clave, temas relacionados y resumen.
