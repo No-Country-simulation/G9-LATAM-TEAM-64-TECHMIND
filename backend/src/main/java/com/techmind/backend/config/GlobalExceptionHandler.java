@@ -1,5 +1,6 @@
 package com.techmind.backend.config;
 
+import com.techmind.backend.service.storage.AlmacenamientoNoConfiguradoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -64,6 +65,27 @@ public class GlobalExceptionHandler {
                 HttpStatus.GATEWAY_TIMEOUT,
                 "El servicio de clasificación no respondió a tiempo: " + e.getMessage(),
                 "El ml-service está vivo pero tarda demasiado, o la red entre ambos va mal."
+        );
+    }
+
+    /** El contenido no existe, o no tiene documento adjunto. */
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, Object>> noEncontrado(IllegalArgumentException e) {
+        return respuesta(
+                HttpStatus.NOT_FOUND,
+                e.getMessage(),
+                "Comprueba el id, o si ese contenido se creó pegando texto en lugar de subiendo un archivo."
+        );
+    }
+
+    /** Se pidió una descarga pero el servidor no tiene credenciales de OCI. */
+    @ExceptionHandler(AlmacenamientoNoConfiguradoException.class)
+    public ResponseEntity<Map<String, Object>> sinAlmacenamiento(AlmacenamientoNoConfiguradoException e) {
+        log.error("Petición de descarga sin almacenamiento configurado");
+        return respuesta(
+                HttpStatus.SERVICE_UNAVAILABLE,
+                e.getMessage(),
+                "Faltan las variables OCI_* en el servicio. Mira docs/oci-credenciales.md."
         );
     }
 

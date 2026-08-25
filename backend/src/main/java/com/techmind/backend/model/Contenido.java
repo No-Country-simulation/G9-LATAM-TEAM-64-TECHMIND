@@ -51,6 +51,16 @@ public class Contenido {
 
     private boolean requiereRevision;
 
+    // Documento original. Nulos cuando el contenido se pegó como texto, o
+    // cuando el almacenamiento en OCI no estaba configurado al subirlo.
+    private String archivoNombre;
+    private String archivoTipo;
+    private Long archivoTamano;
+
+    /** Clave del objeto dentro del bucket, no una URL. Las URL de descarga se
+     *  generan al vuelo y caducan, así que no tiene sentido guardarlas. */
+    private String archivoClave;
+
     @Column(nullable = false)
     private LocalDateTime fechaRegistro;
 

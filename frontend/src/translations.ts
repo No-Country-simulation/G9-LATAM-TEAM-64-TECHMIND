@@ -71,6 +71,8 @@ export const DICT = {
     "detail.metadata": "Metadatos",
     "detail.id": "Identificador",
     "detail.creado": "Registrado",
+    "detail.documento": "Documento original",
+    "detail.descargaDemo": "La descarga solo funciona con la API real conectada.",
     "detail.temas": "Temas relacionados",
 
     "demo.badge": "Datos de muestra",
@@ -151,6 +153,8 @@ export const DICT = {
     "detail.metadata": "Metadata",
     "detail.id": "Identifier",
     "detail.creado": "Registered",
+    "detail.documento": "Original document",
+    "detail.descargaDemo": "Downloads only work with the real API connected.",
     "detail.temas": "Related topics",
 
     "demo.badge": "Sample data",

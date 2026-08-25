@@ -9,6 +9,13 @@ export function toContenido(dto: ContenidoBackendDTO): Contenido {
     texto: dto.texto,
     resumen: dto.resumenCorto ?? undefined,
     temas: dto.temasRelacionados ?? undefined,
+    archivo: dto.archivoNombre && dto.archivoDisponible
+      ? {
+          nombre: dto.archivoNombre,
+          tipo: dto.archivoTipo ?? undefined,
+          tamano: dto.archivoTamano ?? undefined,
+        }
+      : undefined,
   }
 }
 

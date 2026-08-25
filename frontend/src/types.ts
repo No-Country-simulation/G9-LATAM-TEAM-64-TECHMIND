@@ -42,6 +42,9 @@ export type Contenido = ContenidoResumen & {
    *  no referencias a otros contenidos. Se muestran como etiquetas, no como
    *  tarjetas enlazables. */
   temas?: string[]
+  /** Documento original adjunto, si lo hubo. Su presencia es lo que decide si
+   *  se muestra el botón de descarga. */
+  archivo?: { nombre: string; tipo?: string; tamano?: number }
 }
 
 /** Traducción entre el contrato del backend y el modelo que usa la interfaz.
@@ -65,6 +68,11 @@ export type ContenidoBackendDTO = {
   resumenCorto: string | null
   requiereRevision: boolean
   fechaRegistro: string
+  /** Documento original. Nulos cuando el contenido se pegó como texto. */
+  archivoNombre?: string | null
+  archivoTipo?: string | null
+  archivoTamano?: number | null
+  archivoDisponible?: boolean
 }
 
 export type ListaContenidos = {

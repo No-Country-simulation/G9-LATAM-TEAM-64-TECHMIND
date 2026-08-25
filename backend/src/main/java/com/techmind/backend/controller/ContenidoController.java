@@ -5,7 +5,9 @@ import com.techmind.backend.dto.ContenidoResponseDTO;
 import com.techmind.backend.service.ContenidoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/contenidos")
@@ -39,5 +41,24 @@ public class ContenidoController {
             @RequestParam(value = "titulo", required = false) String titulo
     ) {
         return ResponseEntity.status(201).body(contenidoService.processAndSaveFromFile(file, titulo));
+    }
+
+    /** Devuelve un enlace temporal para descargar el documento original.
+     *
+     *  No transmite el archivo: responde un 302 hacia una URL firmada de OCI que
+     *  caduca a los 15 minutos, así que los bytes van del bucket al navegador
+     *  sin pasar por aquí. */
+    @GetMapping("/{id}/archivo")
+    public ResponseEntity<Void> descargarArchivo(@PathVariable Long id) {
+        String url = contenidoService.enlaceDescarga(id);
+        return ResponseEntity.status(302).location(URI.create(url)).build();
+    }
+
+    /** Igual que el anterior, pero devolviendo la URL en JSON en lugar de
+     *  redirigir. Lo usa el frontend, que prefiere abrirla en una pestaña nueva
+     *  a seguir una redirección con fetch. */
+    @GetMapping("/{id}/archivo/enlace")
+    public ResponseEntity<Map<String, String>> enlaceArchivo(@PathVariable Long id) {
+        return ResponseEntity.ok(Map.of("url", contenidoService.enlaceDescarga(id)));
     }
 }
