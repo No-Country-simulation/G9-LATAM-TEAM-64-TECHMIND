@@ -1,0 +1,6 @@
+.venv
+venv
+__pycache__
+*.pyc
+.env
+models/modelo_techmind_v3_oci.joblib
