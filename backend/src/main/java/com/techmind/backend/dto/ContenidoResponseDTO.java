@@ -22,4 +22,15 @@ public class ContenidoResponseDTO {
     private String resumenCorto;
     private boolean requiereRevision;
     private LocalDateTime fechaRegistro;
+
+    /** Nombre original del documento, o null si el contenido se pegó como texto.
+     *  El frontend lo usa para decidir si muestra el botón de descarga. */
+    private String archivoNombre;
+    private String archivoTipo;
+    private Long archivoTamano;
+
+    /** true solo si el original está realmente en el bucket. El nombre puede
+     *  existir sin que haya archivo: cuando se subió con el almacenamiento
+     *  desactivado, se guarda el nombre pero no la copia. */
+    private boolean archivoDisponible;
 }

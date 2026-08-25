@@ -36,6 +36,8 @@ export const ENDPOINTS = {
    *  del `multipart/form-data` (ver `ARCHIVO_FORM_FIELD`) antes de integrar. */
   analizarArchivo: "/api/contenidos/archivo",
   contenidos: "/api/contenidos",
+  /** Enlace temporal de descarga del documento original. */
+  archivoEnlace: (id: string) => `/api/contenidos/${encodeURIComponent(id)}/archivo/enlace`,
   /** No implementado en backend. El detalle no lo necesita: se resuelve desde
    *  el listado cacheado, que ya devuelve el objeto completo de cada contenido.
    *  Queda declarado para cuando el listado crezca y toque paginar. */

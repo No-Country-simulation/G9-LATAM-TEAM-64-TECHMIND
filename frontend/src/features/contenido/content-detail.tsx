@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { ConfidenceMeter, DemoBadge, JsonBlock, KeywordChips } from "@/components/common"
+import { DownloadButton } from "@/features/contenido/download-button"
 import { ROUTES } from "@/config"
 import { useLanguage } from "@/language-context"
 import type { Contenido } from "@/types"
@@ -70,6 +71,19 @@ export function ContentDetail({ contenido, demo }: { contenido: Contenido; demo:
           </Card>
         </div>
       </div>
+
+      {contenido.archivo && (
+        <section className="flex flex-col gap-3">
+          <h2 className="text-sm uppercase tracking-wide text-muted-foreground">
+            {t("detail.documento")}
+          </h2>
+          <DownloadButton
+            id={contenido.id}
+            nombre={contenido.archivo.nombre}
+            tamano={contenido.archivo.tamano}
+          />
+        </section>
+      )}
 
       {/* El backend devuelve nombres de temas derivados de la categoría, no
           referencias a otros contenidos: se pintan como etiquetas, no como
