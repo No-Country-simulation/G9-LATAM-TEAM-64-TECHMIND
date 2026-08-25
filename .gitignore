@@ -37,3 +37,7 @@ next-env.d.ts
 
 # Variables de entorno del despliegue
 .env
+
+# IntelliJ IDEA
+.idea/
+*.iml
