@@ -28,8 +28,28 @@ function buildUrl(path: string, searchParams: ApiRequestOptions["searchParams"])
 }
 
 function buildSignal(signal?: AbortSignal) {
-  const timeout = AbortSignal.timeout(API_TIMEOUT_MS)
-  return signal ? AbortSignal.any([signal, timeout]) : timeout
+  const controller = new AbortController()
+
+  const timeoutId = setTimeout(() => {
+    controller.abort()
+  }, API_TIMEOUT_MS)
+
+  if (signal) {
+    if (signal.aborted) {
+      controller.abort()
+    } else {
+      signal.addEventListener(
+        "abort",
+        () => {
+          controller.abort()
+          clearTimeout(timeoutId)
+        },
+        { once: true },
+      )
+    }
+  }
+
+  return controller.signal
 }
 
 function extractError(parsed: unknown, status: number): string {
